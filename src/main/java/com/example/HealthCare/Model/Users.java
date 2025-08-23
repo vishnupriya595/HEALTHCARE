@@ -1,0 +1,42 @@
+package com.example.HealthCare.Model;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+
+@Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@EqualsAndHashCode(exclude = {"patients"})
+public class Users {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long userId;
+
+    @Column(nullable = false, unique = true)
+    private String username;
+
+    @Column(nullable = false)
+    private String password;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    public enum Role {
+        ADMIN, DOCTOR, NURSE, PATIENT
+    }
+
+    @OneToOne(mappedBy = "users", cascade = CascadeType.ALL)
+    private Doctor doctor;
+
+    @OneToOne(mappedBy = "users", cascade = CascadeType.ALL)
+    private Patient patient;
+
+    @OneToOne(mappedBy = "users", cascade = CascadeType.ALL)
+    private Nurse nurse;
+
+
+
+}

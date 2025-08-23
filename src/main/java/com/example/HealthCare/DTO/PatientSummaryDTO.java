@@ -1,0 +1,26 @@
+package com.example.HealthCare.DTO;
+
+import lombok.Builder;
+import lombok.Data;
+
+import java.util.List;
+
+@Data
+@Builder
+public class PatientSummaryDTO {
+    private Long patientId;
+    private String name;
+    private int age;
+    private String gender;
+    private String address;
+    private String phone;
+    private String disease;
+
+    private DoctorResponseDTO doctor;
+    private NurseResponseDTO nurse;
+    private List<AppointmentDTO> appointments;
+    private List<PrescriptionDTO> prescriptions;
+    private List<BillingDTO> billings;
+
+
+}
