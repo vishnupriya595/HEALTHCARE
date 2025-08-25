@@ -26,10 +26,6 @@ public class Appointment {
     @JoinColumn(name = "doctor_id")
     private Doctor doctor;
 
-    @ManyToOne
-    @JoinColumn(name = "nurse_id", nullable = true)
-    private Nurse nurse;
-
     private LocalDate appointmentDate;
 
     @Enumerated(EnumType.STRING)

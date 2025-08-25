@@ -27,9 +27,6 @@ public class Patient {
     @ToString.Exclude
     private List<Appointment> appointments;
 
-    @ManyToOne
-    @JoinColumn(name = "doctor_id")
-    private Doctor doctor;
 
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
     @ToString.Exclude

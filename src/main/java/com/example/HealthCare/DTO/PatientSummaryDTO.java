@@ -17,7 +17,7 @@ public class PatientSummaryDTO {
     private String disease;
 
     private DoctorResponseDTO doctor;
-    private NurseResponseDTO nurse;
+
     private List<AppointmentDTO> appointments;
     private List<PrescriptionDTO> prescriptions;
     private List<BillingDTO> billings;

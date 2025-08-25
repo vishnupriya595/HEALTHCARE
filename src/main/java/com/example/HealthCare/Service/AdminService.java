@@ -288,35 +288,6 @@ public class AdminService {
                         .build())
                 .collect(Collectors.toList());
     }
-    // Reschedule appointment
-    public AppointmentResponseDTO rescheduleAppointment(Long id, LocalDate newDate) { // ✅ param LocalDate
-        Appointment appointment = appointmentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Appointment not found with id: " + id));
-
-        appointment.setAppointmentDate(newDate); // ✅ LocalDate
-        appointment.setStatus(Appointment.Status.RESCHEDULED);
-
-        appointmentRepository.save(appointment);
-
-        return AppointmentResponseDTO.builder()
-                .appointmentId(appointment.getAppointmentId())
-                .appointmentDate(appointment.getAppointmentDate())
-                .status(appointment.getStatus().name())
-                .doctorId(appointment.getDoctor().getDoctorId())
-                .doctorName(appointment.getDoctor().getName())
-                .patientId(appointment.getPatient().getPatientId())
-                .patientName(appointment.getPatient().getName())
-                .build();
-    }
-
-    // Cancel appointment
-    public void cancelAppointment(Long id) {
-        Appointment appointment = appointmentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Appointment not found with id: " + id));
-
-        appointment.setStatus(Appointment.Status.CANCELLED); // use Enum directly
-        appointmentRepository.save(appointment);
-    }
 
     public PatientSummaryDTO getPatientSummary(Long patientId) {
         Patient patient = patientRepository.findById(patientId)
@@ -330,7 +301,7 @@ public class AdminService {
                         .appointmentDate(app.getAppointmentDate())
                         .status(app.getStatus())
                         .doctorId(app.getDoctor() != null ? app.getDoctor().getDoctorId() : null)
-                        .nurseId(app.getNurse() != null ? app.getNurse().getNurseId() : null)
+//                        .nurseId(app.getNurse() != null ? app.getNurse().getNurseId() : null)
                         .patientId(app.getPatient() != null ? app.getPatient().getPatientId() : null)  // ✅ FIXED
                         .build())
                 .collect(Collectors.toList());
@@ -369,18 +340,6 @@ public class AdminService {
                 .experience(doctor.getExperience())
                 .build() : null;
 
-        // Nurse info (latest appointment nurse)
-        Nurse nurse = appointments.isEmpty() ? null :
-                appointmentRepository.findByPatient_PatientId(patientId)
-                        .stream().findFirst().get().getNurse();
-
-        NurseResponseDTO nurseDTO = nurse != null ? NurseResponseDTO.builder()
-                .nurseId(nurse.getNurseId())
-                .nurseName(nurse.getNurseName())
-                .shift(nurse.getShift())
-                .qualification(nurse.getQualification())   // ✅ Added qualification
-                .build() : null;
-
         return PatientSummaryDTO.builder()
                 .patientId(patient.getPatientId())
                 .name(patient.getName())
@@ -390,7 +349,7 @@ public class AdminService {
                 .phone(patient.getPhone())
                 .disease(patient.getDisease())
                 .doctor(doctorDTO)
-                .nurse(nurseDTO)
+//                .nurse(nurseDTO)
                 .appointments(appointments)
                 .prescriptions(prescriptions)
                 .billings(billings)

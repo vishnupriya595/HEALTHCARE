@@ -1,9 +1,6 @@
 package com.example.HealthCare.Controller;
 
-import com.example.HealthCare.DTO.BillingResponseDTO;
-import com.example.HealthCare.DTO.PatientAppointmentDTO;
-import com.example.HealthCare.DTO.PatientPrescriptionDTO;
-import com.example.HealthCare.DTO.PatientResponseDTO;
+import com.example.HealthCare.DTO.*;
 import com.example.HealthCare.Service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -64,4 +61,15 @@ public class PatientController {
     public ResponseEntity<PatientResponseDTO> getPatientProfile(@PathVariable Long patientId) {
         return ResponseEntity.ok(patientService.getPatientProfile(patientId));
     }
+
+    @GetMapping("/getDoctors")
+    public ResponseEntity<List<DoctorDetailsResDTO>> getDoctors() {
+        return ResponseEntity.ok(patientService.getAllDoctorDetails());
+    }
+
+    @PostMapping("/appointment/patient/{patientId}")
+    public String scheduleAppointment(@PathVariable Long patientId, @RequestBody PatientBookReqDTO patientBookReqDTO) {
+        return patientService.getPatientBookRequest(patientId,patientBookReqDTO.getDoctorName(),patientBookReqDTO.getDate());
+    }
+
 }

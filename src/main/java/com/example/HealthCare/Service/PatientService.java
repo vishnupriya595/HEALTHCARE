@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -53,6 +54,8 @@ public class PatientService {
                         .build())
                 .collect(Collectors.toList());
     }
+
+
 
     // Cancel Appointment
     public PatientAppointmentDTO cancelAppointment(Long appointmentId) {
@@ -108,6 +111,29 @@ public class PatientService {
                         .paymentDate(billing.getPaymentDate())
                         .build())
                 .collect(Collectors.toList());
+    }
+
+    public List<DoctorDetailsResDTO> getAllDoctorDetails() {
+        return doctorRepository.findAll().stream().map(doctor -> DoctorDetailsResDTO.builder()
+                .doctorName(doctor.getName())
+                .specialization(doctor.getSpecialization())
+                .build()).collect(Collectors.toList());
+    }
+
+    public String getPatientBookRequest(Long patientId,String doctorName,LocalDate appointmentDate) {
+        Patient patient = patientRepository.findById(patientId)
+                .orElseThrow(() -> new RuntimeException("Patient not found with ID: " + patientId));
+
+        Doctor doctor = doctorRepository.findByName(doctorName);
+
+        Appointment appointment = Appointment.builder()
+                .doctor(doctor)
+                .patient(patient)
+                .status(Appointment.Status.BOOKED)
+                .appointmentDate(appointmentDate)
+                .build();
+        appointmentRepository.save(appointment);
+        return "Appointment Scheduled!!!";
     }
 
     public PatientResponseDTO getPatientProfile(Long patientId) {

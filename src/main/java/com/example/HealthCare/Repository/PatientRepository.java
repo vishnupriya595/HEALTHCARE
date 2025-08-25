@@ -10,6 +10,5 @@ import org.springframework.stereotype.Repository;
 
 public interface PatientRepository extends JpaRepository<Patient, Long> {
 
-    @Query("SELECT COUNT(DISTINCT p) FROM Patient p WHERE p.doctor.doctorId = :doctorId")
-    int countPatientsAssigned(@Param("doctorId") Long doctorId);
+
 }

@@ -85,7 +85,6 @@ public class ExcelImportService {
                             .status(Appointment.Status.valueOf(row.getCell(1).getStringCellValue().toUpperCase()))
                             .doctorId((long) row.getCell(2).getNumericCellValue())
                             .patientId((long) row.getCell(3).getNumericCellValue())
-                            .nurseId((long) row.getCell(4).getNumericCellValue())
                             .build();
                     saveAppointment(dto);
                 }
@@ -156,8 +155,6 @@ public class ExcelImportService {
         Patient patient = patientRepository.findById(dto.getPatientId())
                 .orElseThrow(() -> new RuntimeException("Patient not found with id " + dto.getPatientId()));
 
-        Nurse nurse = nurseRepository.findById(dto.getNurseId())
-                .orElseThrow(() -> new RuntimeException("Nurse not found with id " + dto.getNurseId()));
 
         // Build appointment entity
         Appointment appointment = Appointment.builder()
@@ -165,7 +162,7 @@ public class ExcelImportService {
                 .status(dto.getStatus()) // already enum
                 .doctor(doctor)
                 .patient(patient)
-                .nurse(nurse)
+//                .nurse(nurse)
                 .build();
 
         // Save appointment

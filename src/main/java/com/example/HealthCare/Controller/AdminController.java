@@ -157,20 +157,6 @@ public class AdminController {
         return ResponseEntity.ok(adminService.getAppointmentsByDate(LocalDate.parse(date)));
     }
 
-    // Reschedule appointment
-    @PutMapping("/appointments/reschedule/{id}")
-    public ResponseEntity<AppointmentResponseDTO> rescheduleAppointment(
-            @PathVariable Long id,
-            @RequestParam String newDate) {
-        return ResponseEntity.ok(adminService.rescheduleAppointment(id, LocalDate.parse(newDate)));
-    }
-
-    // Cancel appointment
-    @PutMapping("/appointments/cancel/{id}")
-    public ResponseEntity<String> cancelAppointment(@PathVariable Long id) {
-        adminService.cancelAppointment(id);
-        return ResponseEntity.ok("Appointment cancelled successfully!");
-    }
 
     @GetMapping("/patient/{id}/summary")
     public ResponseEntity<PatientSummaryDTO> getPatientSummary(@PathVariable Long id) {

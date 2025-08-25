@@ -23,8 +23,8 @@ public class Nurse {
     private String shift;
     private String qualification;
 
-    @OneToMany(mappedBy = "nurse", cascade = CascadeType.ALL)
-    private List<Appointment> appointments;
+//    @OneToMany(mappedBy = "nurse", cascade = CascadeType.ALL)
+//    private List<Appointment> appointments;
 
     @OneToMany(mappedBy = "nurse", cascade = CascadeType.ALL)
     private List<Report> reports;

@@ -13,8 +13,6 @@ public class AppointmentDTO {
 
     private Long doctorId;
     private Long patientId;
-
-    private Long nurseId;
     private LocalDate appointmentDate;
     private Appointment.Status status;       // BOOKED, RESCHEDULED, CANCELLED, COMPLETED
 
