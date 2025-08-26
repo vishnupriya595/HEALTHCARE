@@ -32,8 +32,7 @@ public class Patient {
     @ToString.Exclude
     private List<Prescription> prescriptions;
 
-    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
-    private List<Report> reports;
+
 
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
     private List<Billing> bills;

@@ -1,6 +1,8 @@
 package com.example.HealthCare.Controller;
 
 import com.example.HealthCare.DTO.*;
+import com.example.HealthCare.DTO.Request.*;
+import com.example.HealthCare.DTO.Response.*;
 import com.example.HealthCare.Model.Doctor;
 import com.example.HealthCare.Model.Nurse;
 import com.example.HealthCare.Model.Patient;
@@ -54,8 +56,8 @@ public class AdminController {
     }
 
     @PostMapping("/add/doctor")
-    public ResponseEntity<Doctor> addDoctor(@RequestBody DoctorRequestDTO dto) {
-        Doctor doctor = adminService.addDoctor(dto);
+    public ResponseEntity<AddDoctorResponseDTO> addDoctor(@RequestBody DoctorRequestDTO dto) {
+        AddDoctorResponseDTO doctor = adminService.addDoctor(dto);
         return ResponseEntity.ok(doctor);
     }
 
@@ -87,8 +89,8 @@ public class AdminController {
 
     // Add patient
     @PostMapping("/add/patient")
-    public ResponseEntity<Patient> addPatient(@RequestBody PatientRequestDTO dto) {
-        Patient patient = adminService.addPatient(dto);
+    public ResponseEntity<PatientResponseDTO> addPatient(@RequestBody PatientRequestDTO dto) {
+        PatientResponseDTO patient = adminService.addPatient(dto);
         return ResponseEntity.ok(patient);
     }
 
@@ -107,7 +109,7 @@ public class AdminController {
     // Update patient
     @PutMapping("/update/patient/{id}")
     public ResponseEntity<PatientResponseDTO> updatePatient(@PathVariable Long id,
-                                                            @RequestBody PatientRequestDTO dto) {
+                                                            @RequestBody UpdatePatientReqDTO dto) {
         return ResponseEntity.ok(adminService.updatePatient(id, dto));
     }
 
@@ -140,7 +142,7 @@ public class AdminController {
     // Update nurse
     @PutMapping("/update/nurse/{id}")
     public ResponseEntity<NurseResponseDTO> updateNurse(@PathVariable Long id,
-                                                        @RequestBody NurseRequestDTO dto) {
+                                                        @RequestBody NurseUpdateReqDTO dto) {
         return ResponseEntity.ok(adminService.updateNurse(id, dto));
     }
 
@@ -169,6 +171,10 @@ public class AdminController {
         return ResponseEntity.ok(summary);
     }
 
+    @PostMapping("/profile/{id}")
+    public String updateProile(@PathVariable Long id,@RequestBody AdminReqDTO adminReqDTO) {
+        return adminService.updateProileAdmin(id, adminReqDTO);
+    }
 
 
 

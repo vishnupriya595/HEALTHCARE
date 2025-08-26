@@ -22,18 +22,15 @@ public class Nurse {
     private String nurseName;
     private String shift;
     private String qualification;
+    private String email;
+    private String phoneNumber;
 
-//    @OneToMany(mappedBy = "nurse", cascade = CascadeType.ALL)
-//    private List<Appointment> appointments;
 
-    @OneToMany(mappedBy = "nurse", cascade = CascadeType.ALL)
-    private List<Report> reports;
+
 
     @OneToOne
     @JoinColumn(name = "userId")
     private Users users;
 
-//    @OneToMany(mappedBy = "nurse")   // assumes Patient has nurse field
-//    private List<Patient> patients;
 
 }

@@ -1,6 +1,10 @@
 package com.example.HealthCare.Controller;
 
 import com.example.HealthCare.DTO.*;
+import com.example.HealthCare.DTO.Request.PatientBookReqDTO;
+import com.example.HealthCare.DTO.Response.BillingResponseDTO;
+import com.example.HealthCare.DTO.Response.DoctorDetailsResDTO;
+import com.example.HealthCare.DTO.Response.PatientResponseDTO;
 import com.example.HealthCare.Service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;

@@ -1,35 +1,35 @@
 package com.example.HealthCare.Model;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.vladmihalcea.hibernate.type.json.JsonType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
+@Builder
 
 public class Report {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reportId;
-
-    @ManyToOne
-    @JoinColumn(name = "patient_id")
-    private Patient patient;
-
-    @ManyToOne
-    @JoinColumn(name = "doctor_id", nullable = true)
-    private Doctor doctor;
-
-    @ManyToOne
-    @JoinColumn(name = "nurse_id", nullable = true)
-    private Nurse nurse;
-
+    @Column(unique = true)
     private String reportType;
-    private String description;
-    private String date;
+    @Type(JsonType.class)
+    @Column(columnDefinition = "jsonb")
+    private JsonNode queryConfig;
+
+    private LocalDateTime createdAt;
+
+    @ManyToOne
+    @JoinColumn(name = "userId")
+    private Users user;
 }

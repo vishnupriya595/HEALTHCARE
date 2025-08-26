@@ -1,9 +1,9 @@
 package com.example.HealthCare.Service;
 
 import com.example.HealthCare.Config.JWTService;
-import com.example.HealthCare.DTO.AuthResponse;
-import com.example.HealthCare.DTO.LoginRequest;
-import com.example.HealthCare.DTO.RegisterRequest;
+import com.example.HealthCare.DTO.Response.AuthResponse;
+import com.example.HealthCare.DTO.Request.LoginRequest;
+import com.example.HealthCare.DTO.Request.RegisterRequest;
 import com.example.HealthCare.Model.Users;
 import com.example.HealthCare.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

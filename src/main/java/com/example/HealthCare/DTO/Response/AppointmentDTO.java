@@ -1,4 +1,4 @@
-package com.example.HealthCare.DTO;
+package com.example.HealthCare.DTO.Response;
 
 import com.example.HealthCare.Model.Appointment;
 import lombok.Builder;
@@ -14,7 +14,7 @@ public class AppointmentDTO {
     private Long doctorId;
     private Long patientId;
     private LocalDate appointmentDate;
-    private Appointment.Status status;       // BOOKED, RESCHEDULED, CANCELLED, COMPLETED
+    private Appointment.Status status;
 
 
 

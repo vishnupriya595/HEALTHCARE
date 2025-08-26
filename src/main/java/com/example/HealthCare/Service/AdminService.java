@@ -1,6 +1,8 @@
 package com.example.HealthCare.Service;
 
 import com.example.HealthCare.DTO.*;
+import com.example.HealthCare.DTO.Request.*;
+import com.example.HealthCare.DTO.Response.*;
 import com.example.HealthCare.Model.*;
 import com.example.HealthCare.Repository.*;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ public class AdminService {
     private final UserRepository userRepository;
     private final PrescriptionRepository prescriptionRepository;
     private final BillingRepository billingRepository;
+    private final AdminProfileRepository adminProfileRepository;
     private final PasswordEncoder passwordEncoder;
 
     public Map<String, Object> getDashboardSummary() {
@@ -31,7 +34,7 @@ public class AdminService {
         long totalPatients = patientRepository.count();
         long totalNurses = nurseRepository.count();
 
-        LocalDate today = LocalDate.now(); // ✅ keep as LocalDate
+        LocalDate today = LocalDate.now();
         long activeAppointmentsToday = appointmentRepository.countByAppointmentDate(today);
 
         summary.put("totalPatients", totalPatients);
@@ -43,7 +46,7 @@ public class AdminService {
     }
 
 
-    public Doctor addDoctor(DoctorRequestDTO dto) {
+    public AddDoctorResponseDTO addDoctor(DoctorRequestDTO dto) {
         Users user = Users.builder()
                 .username(dto.getDoctorUsername())
                 .password(passwordEncoder.encode(dto.getDoctorPassword()))
@@ -58,7 +61,11 @@ public class AdminService {
                 .users(user) // relation mapping
                 .build();
 
-        return doctorRepository.save(doctor);
+        doctorRepository.save(doctor);
+
+        return new AddDoctorResponseDTO(
+               doctor.getDoctorId(),doctor.getName(), doctor.getSpecialization(), doctor.getExperience()
+        );
     }
 
     // Get all doctors
@@ -116,7 +123,7 @@ public class AdminService {
     }
 
     // add patient
-    public Patient addPatient(PatientRequestDTO dto) {
+    public PatientResponseDTO addPatient(PatientRequestDTO dto) {
         Users user = Users.builder()
                 .username(dto.getPatientUsername())
                 .password(passwordEncoder.encode(dto.getPatientPassword()))
@@ -134,7 +141,17 @@ public class AdminService {
                 .users(user) // relation mapping
                 .build();
 
-        return patientRepository.save(patient);
+         patientRepository.save(patient);
+
+         return new PatientResponseDTO(
+                 patient.getPatientId(),
+                 patient.getName(),
+                 patient.getAge(),
+                 patient.getGender(),
+                 patient.getAddress(),
+                 patient.getPhone(),
+                 patient.getDisease()
+         );
     }
     // Get all patients
     public List<PatientResponseDTO> getAllPatients() {
@@ -169,7 +186,7 @@ public class AdminService {
     }
 
     // Update patient
-    public PatientResponseDTO updatePatient(Long id, PatientRequestDTO dto) {
+    public PatientResponseDTO updatePatient(Long id, UpdatePatientReqDTO dto) {
         Patient patient = patientRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Patient not found with id: " + id));
 
@@ -198,6 +215,7 @@ public class AdminService {
         Patient patient = patientRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Patient not found with id: " + id));
 
+        userRepository.delete(patient.getUsers());
         patientRepository.delete(patient);
     }
 
@@ -247,7 +265,7 @@ public class AdminService {
     }
 
     // Update nurse
-    public NurseResponseDTO updateNurse(Long id, NurseRequestDTO dto) {
+    public NurseResponseDTO updateNurse(Long id, NurseUpdateReqDTO dto) {
         Nurse nurse = nurseRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Nurse not found with id: " + id));
 
@@ -270,11 +288,12 @@ public class AdminService {
         Nurse nurse = nurseRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Nurse not found with id: " + id));
 
+        userRepository.delete(nurse.getUsers());
         nurseRepository.delete(nurse);
     }
 
     // View appointments by date
-    public List<AppointmentResponseDTO> getAppointmentsByDate(LocalDate date) { // ✅ param LocalDate
+    public List<AppointmentResponseDTO> getAppointmentsByDate(LocalDate date) {
         return appointmentRepository.findByAppointmentDate(date)
                 .stream()
                 .map(app -> AppointmentResponseDTO.builder()
@@ -349,7 +368,6 @@ public class AdminService {
                 .phone(patient.getPhone())
                 .disease(patient.getDisease())
                 .doctor(doctorDTO)
-//                .nurse(nurseDTO)
                 .appointments(appointments)
                 .prescriptions(prescriptions)
                 .billings(billings)
@@ -384,6 +402,23 @@ public class AdminService {
                 .patients(patients)
                 .build();
     }
+
+    public String updateProileAdmin(Long userId,AdminReqDTO adminReqDTO) {
+        Users user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        AdminProfile adminProfile=AdminProfile.builder()
+                .name(adminReqDTO.getName())
+                .email(adminReqDTO.getEmail())
+                .phoneNumber(adminReqDTO.getPhoneNumber())
+                .user(user)
+                .build();
+        adminProfileRepository.save(adminProfile);
+        return "success";
+
+
+    }
+
 
 
 

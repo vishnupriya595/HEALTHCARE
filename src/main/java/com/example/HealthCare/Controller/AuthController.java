@@ -1,8 +1,8 @@
 package com.example.HealthCare.Controller;
 
-import com.example.HealthCare.DTO.AuthResponse;
-import com.example.HealthCare.DTO.LoginRequest;
-import com.example.HealthCare.DTO.RegisterRequest;
+import com.example.HealthCare.DTO.Response.AuthResponse;
+import com.example.HealthCare.DTO.Request.LoginRequest;
+import com.example.HealthCare.DTO.Request.RegisterRequest;
 import com.example.HealthCare.Service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

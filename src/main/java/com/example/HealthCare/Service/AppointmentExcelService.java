@@ -17,7 +17,6 @@ import java.time.LocalDate;
 public class AppointmentExcelService {
 
     private final AppointmentRepository appointmentRepository;
-    private final NurseRepository nurseRepository;
     private final BillingRepository billingRepository;
     private final PatientRepository patientRepository;
     private final PrescriptionRepository prescriptionRepository;
@@ -33,7 +32,6 @@ public class AppointmentExcelService {
 
                 Long doctorId = (long) row.getCell(0).getNumericCellValue();
                 Long patientId = (long) row.getCell(1).getNumericCellValue();
-//                Long nurseId = (long) row.getCell(2).getNumericCellValue();
                 LocalDate appointmentDate = row.getCell(2).getLocalDateTimeCellValue().toLocalDate();
                 Appointment.Status status = Appointment.Status.valueOf(row.getCell(3).getStringCellValue());
                 String medicineName = row.getCell(4).getStringCellValue();
@@ -45,14 +43,12 @@ public class AppointmentExcelService {
 
                 Patient patient = patientRepository.findById(patientId).orElseThrow();
                 Doctor doctor = doctorRepository.findById(doctorId).orElseThrow();
-//                Nurse nurse = nurseId != null ? nurseRepository.findById(nurseId).orElse(null) : null;
 
                 Appointment appointment = Appointment.builder()
                         .appointmentDate(appointmentDate)
                         .status(status)
                         .patient(patient)
                         .doctor(doctor)
-//                        .nurse(nurse)
                         .build();
                 appointmentRepository.save(appointment);
 

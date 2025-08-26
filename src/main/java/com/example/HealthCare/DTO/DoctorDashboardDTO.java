@@ -8,6 +8,6 @@ import lombok.Data;
 
 public class DoctorDashboardDTO {
 
-    private int totalAppointments;
-    private int totalPatientsAssigned;
+    private long totalAppointments;
+    private long totalPatientsAssigned;
 }

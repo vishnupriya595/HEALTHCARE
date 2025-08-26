@@ -1,22 +1,23 @@
 package com.example.HealthCare.Service;
 
 import com.example.HealthCare.DTO.*;
-import com.example.HealthCare.Model.Appointment;
-import com.example.HealthCare.Model.Doctor;
-import com.example.HealthCare.Model.Patient;
-import com.example.HealthCare.Model.Prescription;
-import com.example.HealthCare.Repository.AppointmentRepository;
-import com.example.HealthCare.Repository.DoctorRepository;
-import com.example.HealthCare.Repository.PatientRepository;
-import com.example.HealthCare.Repository.PrescriptionRepository;
+import com.example.HealthCare.DTO.Request.AppointmentDoctorReqDTO;
+import com.example.HealthCare.DTO.Request.DoctorProfileReqDTO;
+import com.example.HealthCare.DTO.Response.AppointmentDoctorResponseDTO;
+import com.example.HealthCare.DTO.Response.PatientDiseaseResponseDTO;
+import com.example.HealthCare.DTO.Response.PatientResponseDTO;
+import com.example.HealthCare.DTO.Response.PrescriptionResponseDTO;
+import com.example.HealthCare.Model.*;
+import com.example.HealthCare.Repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.print.Doc;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,6 +30,7 @@ public class DoctorService {
     private final PatientRepository patientRepository;
     private final AppointmentRepository appointmentRepository;
     private final PrescriptionRepository prescriptionRepository;
+    private final UserRepository userRepository;
 
 
 
@@ -46,7 +48,7 @@ public class DoctorService {
     }
 
 
-    public PatientResponseDTO getPatientDetails(Long doctorId, Long patientId) {
+    public PatientResponseDTO getPatientDetails( Long patientId) {
 
 
         Patient p = patientRepository.findById(patientId)
@@ -69,15 +71,23 @@ public class DoctorService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Doctor not found"));
         Patient patient = patientRepository.findById(patientId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Patient not found"));
+        List<Appointment> appointments = appointmentRepository.findByDoctorIdAndPatientId(doctorId, patientId);
 
+        if (appointments.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No appointment exists between doctor and patient");
+        }
 
-
+        // Pick the latest appointment by date
+        Appointment latestAppointment = appointments.stream()
+                .max(Comparator.comparing(Appointment::getAppointmentDate))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "No valid appointment found"));
         Prescription entity = new Prescription();
         entity.setDoctor(doctor);
         entity.setPatient(patient);
         entity.setMedicineName(req.getMedicineName());
         entity.setDosage(req.getDosage());
         entity.setInstructions(req.getInstructions());
+        entity.setAppointment(latestAppointment);
 
 
         Prescription saved = prescriptionRepository.save(entity);
@@ -129,10 +139,12 @@ public class DoctorService {
                 .build();
     }
 
-
-
-
-
-
-
+    public String updateDoctorProfile(Long userId, DoctorProfileReqDTO req) {
+        Users user = userRepository.findById(userId).get();
+        Doctor doctor=doctorRepository.findByUsers(user);
+        doctor.setEmail(req.getEmail());
+        doctor.setPhoneNumber(req.getPhoneNumber());
+        doctorRepository.save(doctor);
+        return "Doctor Profile updated successfully";
+    }
 }

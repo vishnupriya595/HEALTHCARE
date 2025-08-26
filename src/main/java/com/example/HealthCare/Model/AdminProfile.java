@@ -6,34 +6,20 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-
-public class Doctor {
+public class AdminProfile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long doctorId;
-
+    private Long adminId;
     private String name;
-    private String specialization;
-    private int experience;
     private String email;
     private String phoneNumber;
 
-    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
-    private List<Appointment> appointments;
-
-    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
-    private List<Prescription> prescriptions;
-
-
     @OneToOne
     @JoinColumn(name = "userId")
-    private Users users;
-
+    private Users user;
 }

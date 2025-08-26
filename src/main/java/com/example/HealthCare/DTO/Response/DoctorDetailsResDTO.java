@@ -1,18 +1,15 @@
-package com.example.HealthCare.DTO;
+package com.example.HealthCare.DTO.Response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-
 @Data
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
-
-public class PatientBookReqDTO {
+@NoArgsConstructor
+@Builder
+public class DoctorDetailsResDTO {
     private String doctorName;
-    private LocalDate date;
+    private String specialization;
 }

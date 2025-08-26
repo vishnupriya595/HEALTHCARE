@@ -19,6 +19,4 @@ public class PatientAppointmentDTO {
     private Appointment.Status status;
     private Long doctorId;
     private String doctorName;
-    private Long patientId;
-    private Long nurseId;
 }

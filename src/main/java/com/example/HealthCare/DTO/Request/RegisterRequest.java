@@ -1,4 +1,4 @@
-package com.example.HealthCare.DTO;
+package com.example.HealthCare.DTO.Request;
 
 import com.example.HealthCare.Model.Users;
 import lombok.Data;

@@ -1,10 +1,8 @@
-package com.example.HealthCare.DTO;
+package com.example.HealthCare.DTO.Response;
 
 import com.example.HealthCare.Model.Billing;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 

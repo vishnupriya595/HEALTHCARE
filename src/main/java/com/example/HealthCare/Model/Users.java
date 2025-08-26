@@ -3,6 +3,8 @@ package com.example.HealthCare.Model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 
 @Entity
 @Data
@@ -36,6 +38,14 @@ public class Users {
 
     @OneToOne(mappedBy = "users", cascade = CascadeType.ALL)
     private Nurse nurse;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private AdminProfile adminProfile;
+
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private List<Report> report;
+
 
 
 

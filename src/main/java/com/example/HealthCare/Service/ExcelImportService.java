@@ -1,18 +1,19 @@
 package com.example.HealthCare.Service;
 
-import com.example.HealthCare.DTO.*;
+import com.example.HealthCare.DTO.Request.DoctorRequestDTO;
+import com.example.HealthCare.DTO.Request.NurseRequestDTO;
+import com.example.HealthCare.DTO.Request.PatientRequestDTO;
+import com.example.HealthCare.DTO.Response.AppointmentDTO;
 import com.example.HealthCare.Model.*;
 import com.example.HealthCare.Repository.*;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -42,8 +43,6 @@ public class ExcelImportService {
                             .doctorName(row.getCell(0).getStringCellValue())
                             .specialization(row.getCell(1).getStringCellValue())
                             .experience((int) row.getCell(2).getNumericCellValue())
-//                            .dEmail(row.getCell(3).getStringCellValue())
-//                            .dPhone(row.getCell(4).getStringCellValue())
                             .doctorUsername(row.getCell(3).getStringCellValue())
                             .doctorPassword(row.getCell(4).getStringCellValue())
                             .doctorRole("DOCTOR")
@@ -55,8 +54,6 @@ public class ExcelImportService {
                             .nurseName(row.getCell(0).getStringCellValue())
                             .shift(row.getCell(1).getStringCellValue())
                             .qualification(row.getCell(2).getStringCellValue())
-//                            .nEmail(row.getCell(3).getStringCellValue())
-//                            .nPhone(row.getCell(4).getStringCellValue())
                             .nurseUsername(row.getCell(3).getStringCellValue())
                             .nursePassword(row.getCell(4).getStringCellValue())
                             .nurseRole("NURSE")
@@ -71,7 +68,6 @@ public class ExcelImportService {
                             .address(row.getCell(3).getStringCellValue())
                             .phone(row.getCell(4).getStringCellValue())
                             .disease(row.getCell(5).getStringCellValue())
-//                            .pEmail(row.getCell(6).getStringCellValue())
                             .patientUsername(row.getCell(6).getStringCellValue())
                             .patientPassword(row.getCell(7).getStringCellValue())
                             .patientRole("PATIENT")
@@ -162,7 +158,6 @@ public class ExcelImportService {
                 .status(dto.getStatus()) // already enum
                 .doctor(doctor)
                 .patient(patient)
-//                .nurse(nurse)
                 .build();
 
         // Save appointment

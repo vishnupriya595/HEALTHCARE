@@ -1,7 +1,19 @@
 package com.example.HealthCare.Controller;
 
 import com.example.HealthCare.DTO.*;
+import com.example.HealthCare.DTO.Request.AdminReqDTO;
+import com.example.HealthCare.DTO.Request.AppointmentDoctorReqDTO;
+import com.example.HealthCare.DTO.Request.DoctorProfileReqDTO;
+import com.example.HealthCare.DTO.Request.ReportReqDTO;
+import com.example.HealthCare.DTO.Response.AppointmentDoctorResponseDTO;
+import com.example.HealthCare.DTO.Response.PatientDiseaseResponseDTO;
+import com.example.HealthCare.DTO.Response.PatientResponseDTO;
+import com.example.HealthCare.DTO.Response.PrescriptionResponseDTO;
+import com.example.HealthCare.Model.Report;
+import com.example.HealthCare.Model.Users;
+import com.example.HealthCare.Repository.UserRepository;
 import com.example.HealthCare.Service.DoctorService;
+import com.example.HealthCare.Service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,8 +25,10 @@ import java.util.List;
 public class DoctorController {
     @Autowired
     private DoctorService doctorService;
-
-
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private ReportService reportService;
 
 
     @GetMapping("{doctorId}/patients")
@@ -23,11 +37,18 @@ public class DoctorController {
     }
 
 
-    @GetMapping("{doctorId}/patients/{patientId}")
+    @GetMapping("/patients/{patientId}")
     public ResponseEntity<PatientResponseDTO> getPatientDetails(
-            @PathVariable Long doctorId,
+
             @PathVariable Long patientId) {
-        return ResponseEntity.ok(doctorService.getPatientDetails(doctorId, patientId));
+        return ResponseEntity.ok(doctorService.getPatientDetails( patientId));
+    }
+
+    @PostMapping("/report/{username}")
+    public String createReport(@PathVariable String username,@RequestBody ReportReqDTO reportReqDTO) {
+        Users user =userRepository.findByUsername(username);
+        reportService.getReport(reportReqDTO.getName(),reportReqDTO.getResponseData(),user);
+        return "Report Created";
     }
 
 
@@ -55,6 +76,13 @@ public class DoctorController {
             @PathVariable Long appointmentId,
             @RequestBody AppointmentDoctorReqDTO req) {
         return ResponseEntity.ok(doctorService.rescheduleAppointment(doctorId, appointmentId, req));
+    }
+
+    @PostMapping("update/profile/{id}")
+    public String updateProfile(@PathVariable Long id, @RequestBody DoctorProfileReqDTO  doctorProfileReqDTO) {
+        return doctorService.updateDoctorProfile(id, doctorProfileReqDTO);
+
+
     }
 
 

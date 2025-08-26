@@ -1,5 +1,7 @@
 package com.example.HealthCare.DTO;
 
+import com.example.HealthCare.DTO.Response.AppointmentDTO;
+import com.example.HealthCare.DTO.Response.DoctorResponseDTO;
 import lombok.Builder;
 import lombok.Data;
 

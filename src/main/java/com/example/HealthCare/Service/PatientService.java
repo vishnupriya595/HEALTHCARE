@@ -1,9 +1,11 @@
 package com.example.HealthCare.Service;
 
 import com.example.HealthCare.DTO.*;
+import com.example.HealthCare.DTO.Response.BillingResponseDTO;
+import com.example.HealthCare.DTO.Response.DoctorDetailsResDTO;
+import com.example.HealthCare.DTO.Response.PatientResponseDTO;
 import com.example.HealthCare.Model.Appointment;
 import com.example.HealthCare.Model.Doctor;
-import com.example.HealthCare.Model.Nurse;
 import com.example.HealthCare.Model.Patient;
 import com.example.HealthCare.Repository.*;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,7 +23,6 @@ public class PatientService {
     private final PatientRepository patientRepository;
     private final DoctorRepository doctorRepository;
     private final AppointmentRepository appointmentRepository;
-    private final NurseRepository nurseRepository;
     private final PrescriptionRepository prescriptionRepository;
     private final BillingRepository billingRepository;
 
@@ -95,7 +95,7 @@ public class PatientService {
         dto.setStatus(a.getStatus());
         dto.setDoctorId(a.getDoctor().getDoctorId());
         dto.setDoctorName(a.getDoctor().getName());
-        dto.setPatientId(a.getPatient().getPatientId());
+//        dto.setPatientId(a.getPatient().getPatientId());
         return dto;
     }
 

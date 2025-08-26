@@ -1,4 +1,4 @@
-package com.example.HealthCare.DTO;
+package com.example.HealthCare.DTO.Request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class DoctorDetailsResDTO {
-    private String doctorName;
-    private String specialization;
+
+public class NurseUpdateReqDTO {
+    private String nurseName;
+    private String shift;
+    private String qualification;
 }

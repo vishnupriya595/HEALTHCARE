@@ -1,6 +1,7 @@
 package com.example.HealthCare.Repository;
 
 import com.example.HealthCare.Model.Appointment;
+import com.example.HealthCare.Model.Doctor;
 import com.example.HealthCare.Model.Patient;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -25,9 +26,6 @@ public interface AppointmentRepository extends JpaRepository<Appointment,Long> {
 
     List<Appointment> findByDoctor_DoctorId(Long doctorId);
 
-//    @Query("SELECT COUNT(a) FROM Appointment a WHERE a.doctor.doctorId = :doctorId AND a.appointmentDate = :today")
-//    int countTodayAppointments(@Param("doctorId") Long doctorId, @Param("today") LocalDate today);
-
     // Fetch upcoming appointments for a patient
     @Query("SELECT a FROM Appointment a WHERE a.patient.patientId = :patientId AND a.appointmentDate >= :date ORDER BY a.appointmentDate ASC")
     List<Appointment> findUpcomingAppointments(Long patientId, LocalDate date);
@@ -41,7 +39,8 @@ public interface AppointmentRepository extends JpaRepository<Appointment,Long> {
 
     Optional<Appointment> findByDoctorDoctorIdAndAppointmentId(Long doctorId, Long appointmentId);
 
-
+    @Query("SELECT a FROM Appointment a WHERE a.patient.patientId = :patientId AND a.doctor.doctorId = :doctorId ORDER BY a.appointmentDate DESC")
+    List<Appointment> findByDoctorIdAndPatientId(@Param("doctorId") Long doctorId, @Param("patientId") Long patientId);
 }
 
 
