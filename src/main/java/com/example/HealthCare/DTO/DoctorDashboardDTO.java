@@ -3,11 +3,13 @@ package com.example.HealthCare.DTO;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.UUID;
+
 @Data
 @Builder
 
 public class DoctorDashboardDTO {
 
-    private long totalAppointments;
-    private long totalPatientsAssigned;
+    private UUID totalAppointments;
+    private UUID totalPatientsAssigned;
 }

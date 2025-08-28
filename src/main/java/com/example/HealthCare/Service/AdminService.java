@@ -26,6 +26,7 @@ public class AdminService {
     private final BillingRepository billingRepository;
     private final AdminProfileRepository adminProfileRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AdminProfileRepository addAdminProfileRepository;
 
     public Map<String, Object> getDashboardSummary() {
         Map<String, Object> summary = new HashMap<>();
@@ -82,7 +83,7 @@ public class AdminService {
     }
 
     // Get doctor by ID
-    public DoctorResponseDTO getDoctorById(Long id) {
+    public DoctorResponseDTO getDoctorById(UUID id) {
         Doctor doc = doctorRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Doctor not found with id: " + id));
 
@@ -95,7 +96,7 @@ public class AdminService {
     }
 
     // Update doctor
-    public DoctorResponseDTO updateDoctor(Long id, DoctorRequestDTO dto) {
+    public DoctorResponseDTO updateDoctor(UUID id, DoctorRequestDTO dto) {
         Doctor doctor = doctorRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Doctor not found with id: " + id));
 
@@ -115,7 +116,7 @@ public class AdminService {
 
 
     // Delete doctor
-    public void deleteDoctor(Long id) {
+    public void deleteDoctor(UUID id) {
         Doctor doctor = doctorRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Doctor not found with id: " + id));
         userRepository.delete(doctor.getUsers());
@@ -170,7 +171,7 @@ public class AdminService {
     }
 
     // Get patient by ID
-    public PatientResponseDTO getPatientById(Long id) {
+    public PatientResponseDTO getPatientById(UUID id) {
         Patient pat = patientRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Patient not found with id: " + id));
 
@@ -186,7 +187,7 @@ public class AdminService {
     }
 
     // Update patient
-    public PatientResponseDTO updatePatient(Long id, UpdatePatientReqDTO dto) {
+    public PatientResponseDTO updatePatient(UUID id, UpdatePatientReqDTO dto) {
         Patient patient = patientRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Patient not found with id: " + id));
 
@@ -211,7 +212,7 @@ public class AdminService {
     }
 
     // Delete patient
-    public void deletePatient(Long id) {
+    public void deletePatient(UUID id) {
         Patient patient = patientRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Patient not found with id: " + id));
 
@@ -252,7 +253,7 @@ public class AdminService {
     }
 
     // Get nurse by ID
-    public NurseResponseDTO getNurseById(Long id) {
+    public NurseResponseDTO getNurseById(UUID id) {
         Nurse nurse = nurseRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Nurse not found with id: " + id));
 
@@ -265,7 +266,7 @@ public class AdminService {
     }
 
     // Update nurse
-    public NurseResponseDTO updateNurse(Long id, NurseUpdateReqDTO dto) {
+    public NurseResponseDTO updateNurse(UUID id, NurseUpdateReqDTO dto) {
         Nurse nurse = nurseRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Nurse not found with id: " + id));
 
@@ -284,7 +285,7 @@ public class AdminService {
     }
 
     // Delete nurse
-    public void deleteNurse(Long id) {
+    public void deleteNurse(UUID id) {
         Nurse nurse = nurseRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Nurse not found with id: " + id));
 
@@ -308,7 +309,7 @@ public class AdminService {
                 .collect(Collectors.toList());
     }
 
-    public PatientSummaryDTO getPatientSummary(Long patientId) {
+    public PatientSummaryDTO getPatientSummary(UUID patientId) {
         Patient patient = patientRepository.findById(patientId)
                 .orElseThrow(() -> new RuntimeException("Patient not found"));
 
@@ -374,7 +375,7 @@ public class AdminService {
                 .build();
     }
 
-    public DoctorSummaryDTO getDoctorSummary(Long doctorId) {
+    public DoctorSummaryDTO getDoctorSummary(UUID doctorId) {
         Doctor doctor = doctorRepository.findById(doctorId)
                 .orElseThrow(() -> new RuntimeException("Doctor not found"));
 
@@ -403,7 +404,7 @@ public class AdminService {
                 .build();
     }
 
-    public String updateProileAdmin(Long userId,AdminReqDTO adminReqDTO) {
+    public String updateProileAdmin(UUID userId,AdminReqDTO adminReqDTO) {
         Users user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -416,6 +417,19 @@ public class AdminService {
         adminProfileRepository.save(adminProfile);
         return "success";
 
+
+    }
+
+    public  AdminResponseDTO getProfile(UUID userId) {
+        Users user =userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        AdminProfile adminProfile=adminProfileRepository.findByUser(user);
+        AdminResponseDTO dto=AdminResponseDTO.builder()
+                .name(adminProfile.getName())
+                .email(adminProfile.getEmail())
+                .phone(adminProfile.getPhoneNumber())
+                .build();
+        return dto;
 
     }
 

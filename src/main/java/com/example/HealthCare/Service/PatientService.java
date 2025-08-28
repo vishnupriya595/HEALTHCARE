@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,7 +28,7 @@ public class PatientService {
     private final BillingRepository billingRepository;
 
 
-    public List<PatientAppointmentDTO> getUpcomingAppointments(Long patientId, LocalDate fromDate) {
+    public List<PatientAppointmentDTO> getUpcomingAppointments(UUID patientId, LocalDate fromDate) {
         return appointmentRepository.findUpcomingAppointments(patientId, fromDate)
                 .stream()
                 .map(a -> PatientAppointmentDTO.builder()
@@ -40,7 +41,7 @@ public class PatientService {
                 .collect(Collectors.toList());
     }
 
-    public List<PatientPrescriptionDTO> getPrescriptionsByPatient(Long patientId) {
+    public List<PatientPrescriptionDTO> getPrescriptionsByPatient(UUID patientId) {
         return prescriptionRepository.findByPatient_PatientId(patientId)
                 .stream()
                 .map(p -> PatientPrescriptionDTO.builder()
@@ -58,7 +59,7 @@ public class PatientService {
 
 
     // Cancel Appointment
-    public PatientAppointmentDTO cancelAppointment(Long appointmentId) {
+    public PatientAppointmentDTO cancelAppointment(UUID appointmentId) {
         Appointment appointment = appointmentRepository.findById(appointmentId)
                 .orElseThrow(() -> new RuntimeException("Appointment not found"));
 
@@ -69,7 +70,7 @@ public class PatientService {
     }
 
     // Reschedule Appointment
-    public PatientAppointmentDTO rescheduleAppointment(Long appointmentId, LocalDate newDate) {
+    public PatientAppointmentDTO rescheduleAppointment(UUID appointmentId, LocalDate newDate) {
         Appointment appointment = appointmentRepository.findById(appointmentId)
                 .orElseThrow(() -> new RuntimeException("Appointment not found"));
 
@@ -81,7 +82,7 @@ public class PatientService {
     }
 
     // View All Appointments for a Patient
-    public List<PatientAppointmentDTO> getAppointmentsByPatient(Long patientId) {
+    public List<PatientAppointmentDTO> getAppointmentsByPatient(UUID patientId) {
         return appointmentRepository.findByPatient_PatientId(patientId)
                 .stream()
                 .map(this::mapToDTO)
@@ -99,7 +100,7 @@ public class PatientService {
         return dto;
     }
 
-    public List<BillingResponseDTO> getBillingByPatientId(Long patientId) {
+    public List<BillingResponseDTO> getBillingByPatientId(UUID patientId) {
         return billingRepository.findByPatient_PatientId(patientId)
                 .stream()
                 .map(billing -> BillingResponseDTO.builder()
@@ -120,7 +121,7 @@ public class PatientService {
                 .build()).collect(Collectors.toList());
     }
 
-    public String getPatientBookRequest(Long patientId,String doctorName,LocalDate appointmentDate) {
+    public String getPatientBookRequest(UUID patientId,String doctorName,LocalDate appointmentDate) {
         Patient patient = patientRepository.findById(patientId)
                 .orElseThrow(() -> new RuntimeException("Patient not found with ID: " + patientId));
 
@@ -136,7 +137,7 @@ public class PatientService {
         return "Appointment Scheduled!!!";
     }
 
-    public PatientResponseDTO getPatientProfile(Long patientId) {
+    public PatientResponseDTO getPatientProfile(UUID patientId) {
         Patient patient = patientRepository.findById(patientId)
                 .orElseThrow(() -> new RuntimeException("Patient not found with ID: " + patientId));
 

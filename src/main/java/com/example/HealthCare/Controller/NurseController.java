@@ -9,8 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/nurse")
+@CrossOrigin(origins = "http://localhost:4200")
 public class NurseController {
 
     @Autowired
@@ -19,12 +22,12 @@ public class NurseController {
     private NurseService nurseService;
 
     @GetMapping("/patient/{id}/summary")
-    public ResponseEntity<PatientSummaryDTO> getPatientSummary(@PathVariable Long id) {
+    public ResponseEntity<PatientSummaryDTO> getPatientSummary(@PathVariable UUID id) {
         return ResponseEntity.ok(adminService.getPatientSummary(id));
     }
 
     @PostMapping("update/profile/{id}")
-    public String updateProfile(@PathVariable Long id, @RequestBody NurseProfileReqDTO nurseProfileReqDTO) {
+    public String updateProfile(@PathVariable UUID id, @RequestBody NurseProfileReqDTO nurseProfileReqDTO) {
         return nurseService.updateNurseProfile(id, nurseProfileReqDTO);
 
 

@@ -5,11 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Builder
 public class DoctorSummaryDTO {
-    private Long doctorId;
+    private UUID doctorId;
     private String doctorName;
     private String specialization;
     private int experience;

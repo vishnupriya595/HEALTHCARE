@@ -3,15 +3,17 @@ package com.example.HealthCare.DTO;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.UUID;
+
 @Data
 @Builder
 
 public class PatientPrescriptionDTO {
-    private Long prescriptionId;
+    private UUID prescriptionId;
     private String medicineName;
     private String dosage;
     private String instructions;
-    private Long doctorId;
+    private UUID doctorId;
     private String doctorName;   // extra for patient readability
-    private Long patientId;
+    private UUID patientId;
 }

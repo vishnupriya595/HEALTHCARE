@@ -5,14 +5,15 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Data
 @Builder
 public class AppointmentDTO {
 
 
-    private Long doctorId;
-    private Long patientId;
+    private UUID doctorId;
+    private UUID patientId;
     private LocalDate appointmentDate;
     private Appointment.Status status;
 

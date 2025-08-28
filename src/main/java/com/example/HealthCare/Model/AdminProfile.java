@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -13,8 +15,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class AdminProfile {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long adminId;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID adminId;
     private String name;
     private String email;
     private String phoneNumber;

@@ -8,8 +8,10 @@ import com.example.HealthCare.Model.Nurse;
 import com.example.HealthCare.Model.Patient;
 import com.example.HealthCare.Service.AdminService;
 import com.example.HealthCare.Service.AppointmentExcelService;
+import com.example.HealthCare.Service.AuthService;
 import com.example.HealthCare.Service.ExcelImportService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,16 +19,19 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/admin")
 @RequiredArgsConstructor
-
+//@CrossOrigin(origins = "http://localhost:4200")
 public class AdminController {
 
     private final ExcelImportService excelImportService;
     private final AppointmentExcelService appointmentExcelService;
     private final AdminService adminService;
+
+
 
 
     @PostMapping("/upload")
@@ -69,20 +74,20 @@ public class AdminController {
 
     // Get doctor by ID
     @GetMapping("/doctor/{id}")
-    public ResponseEntity<DoctorResponseDTO> getDoctorById(@PathVariable Long id) {
+    public ResponseEntity<DoctorResponseDTO> getDoctorById(@PathVariable UUID id) {
         return ResponseEntity.ok(adminService.getDoctorById(id));
     }
 
     // Update doctor
     @PutMapping("/update/doctor/{id}")
-    public ResponseEntity<DoctorResponseDTO> updateDoctor(@PathVariable Long id,
+    public ResponseEntity<DoctorResponseDTO> updateDoctor(@PathVariable UUID id,
                                                           @RequestBody DoctorRequestDTO dto) {
         return ResponseEntity.ok(adminService.updateDoctor(id, dto));
     }
 
     // Delete doctor
     @DeleteMapping("/delete/doctor/{id}")
-    public ResponseEntity<String> deleteDoctor(@PathVariable Long id) {
+    public ResponseEntity<String> deleteDoctor(@PathVariable UUID id) {
         adminService.deleteDoctor(id);
         return ResponseEntity.ok("Doctor deleted successfully!");
     }
@@ -102,20 +107,20 @@ public class AdminController {
 
     // Get patient by ID
     @GetMapping("/patient/{id}")
-    public ResponseEntity<PatientResponseDTO> getPatientById(@PathVariable Long id) {
+    public ResponseEntity<PatientResponseDTO> getPatientById(@PathVariable UUID id) {
         return ResponseEntity.ok(adminService.getPatientById(id));
     }
 
     // Update patient
     @PutMapping("/update/patient/{id}")
-    public ResponseEntity<PatientResponseDTO> updatePatient(@PathVariable Long id,
+    public ResponseEntity<PatientResponseDTO> updatePatient(@PathVariable UUID id,
                                                             @RequestBody UpdatePatientReqDTO dto) {
         return ResponseEntity.ok(adminService.updatePatient(id, dto));
     }
 
     // Delete patient
     @DeleteMapping("/delete/patient/{id}")
-    public ResponseEntity<String> deletePatient(@PathVariable Long id) {
+    public ResponseEntity<String> deletePatient(@PathVariable UUID id) {
         adminService.deletePatient(id);
         return ResponseEntity.ok("Patient deleted successfully!");
     }
@@ -135,20 +140,20 @@ public class AdminController {
 
     // Get nurse by ID
     @GetMapping("/nurse/{id}")
-    public ResponseEntity<NurseResponseDTO> getNurseById(@PathVariable Long id) {
+    public ResponseEntity<NurseResponseDTO> getNurseById(@PathVariable UUID id) {
         return ResponseEntity.ok(adminService.getNurseById(id));
     }
 
     // Update nurse
     @PutMapping("/update/nurse/{id}")
-    public ResponseEntity<NurseResponseDTO> updateNurse(@PathVariable Long id,
+    public ResponseEntity<NurseResponseDTO> updateNurse(@PathVariable UUID id,
                                                         @RequestBody NurseUpdateReqDTO dto) {
         return ResponseEntity.ok(adminService.updateNurse(id, dto));
     }
 
     // Delete nurse
     @DeleteMapping("/delete/nurse/{id}")
-    public ResponseEntity<String> deleteNurse(@PathVariable Long id) {
+    public ResponseEntity<String> deleteNurse(@PathVariable UUID id) {
         adminService.deleteNurse(id);
         return ResponseEntity.ok("Nurse deleted successfully!");
     }
@@ -161,19 +166,25 @@ public class AdminController {
 
 
     @GetMapping("/patient/{id}/summary")
-    public ResponseEntity<PatientSummaryDTO> getPatientSummary(@PathVariable Long id) {
+    public ResponseEntity<PatientSummaryDTO> getPatientSummary(@PathVariable UUID id) {
         return ResponseEntity.ok(adminService.getPatientSummary(id));
     }
 
     @GetMapping("/doctor/{doctorId}/summary")
-    public ResponseEntity<DoctorSummaryDTO> getDoctorSummary(@PathVariable Long doctorId) {
+    public ResponseEntity<DoctorSummaryDTO> getDoctorSummary(@PathVariable UUID doctorId) {
         DoctorSummaryDTO summary = adminService.getDoctorSummary(doctorId);
         return ResponseEntity.ok(summary);
     }
 
     @PostMapping("/profile/{id}")
-    public String updateProile(@PathVariable Long id,@RequestBody AdminReqDTO adminReqDTO) {
+    public String updateProile(@PathVariable UUID id,@RequestBody AdminReqDTO adminReqDTO) {
         return adminService.updateProileAdmin(id, adminReqDTO);
+    }
+
+    @GetMapping("/profile/{id}")
+    public ResponseEntity<AdminResponseDTO> getProile(@PathVariable UUID id) {
+        AdminResponseDTO dto=adminService.getProfile(id);
+        return ResponseEntity.ok(dto);
     }
 
 

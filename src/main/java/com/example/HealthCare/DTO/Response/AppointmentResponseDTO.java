@@ -4,16 +4,17 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Data
 @Builder
 
 public class AppointmentResponseDTO {
-    private Long appointmentId;
+    private UUID appointmentId;
     private LocalDate appointmentDate;
     private String status;
-    private Long doctorId;
+    private UUID doctorId;
     private String doctorName;
-    private Long patientId;
+    private UUID patientId;
     private String patientName;
 }

@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -16,8 +17,8 @@ import java.util.List;
 
 public class Nurse {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long nurseId;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID nurseId;
 
     private String nurseName;
     private String shift;

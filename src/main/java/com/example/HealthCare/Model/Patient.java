@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -13,8 +14,8 @@ import java.util.List;
 @EqualsAndHashCode(exclude = {"users"})
 public class Patient {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long patientId;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID patientId;
 
     private String name;
     private int age;

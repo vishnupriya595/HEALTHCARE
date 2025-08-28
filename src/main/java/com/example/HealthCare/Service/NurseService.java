@@ -11,6 +11,8 @@ import com.example.HealthCare.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class NurseService {
 
@@ -24,7 +26,7 @@ public class NurseService {
     private DoctorRepository doctorRepository;
 
 
-    public String updateNurseProfile(Long userId, NurseProfileReqDTO req) {
+    public String updateNurseProfile(UUID userId, NurseProfileReqDTO req) {
         Users user = userRepository.findById(userId).get();
         Nurse nurse = nurseRepository.findByUsers(user);
         nurse.setEmail(req.getEmail());

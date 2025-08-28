@@ -19,6 +19,7 @@ import javax.print.Doc;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,7 +35,7 @@ public class DoctorService {
 
 
 
-    public List<PatientDiseaseResponseDTO> listPatientsAssigned(Long doctorId) {
+    public List<PatientDiseaseResponseDTO> listPatientsAssigned(UUID doctorId) {
         doctorRepository.findById(doctorId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Doctor not found"));
 
@@ -48,7 +49,7 @@ public class DoctorService {
     }
 
 
-    public PatientResponseDTO getPatientDetails( Long patientId) {
+    public PatientResponseDTO getPatientDetails( UUID patientId) {
 
 
         Patient p = patientRepository.findById(patientId)
@@ -66,7 +67,7 @@ public class DoctorService {
     }
 
     @Transactional
-    public PrescriptionResponseDTO addPrescription(Long doctorId, Long patientId, PrescriptionDTO req) {
+    public PrescriptionResponseDTO addPrescription(UUID doctorId, UUID patientId, PrescriptionDTO req) {
         Doctor doctor = doctorRepository.findById(doctorId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Doctor not found"));
         Patient patient = patientRepository.findById(patientId)
@@ -103,7 +104,7 @@ public class DoctorService {
     }
 
     // Get all upcoming appointments for doctor
-    public List<AppointmentDoctorResponseDTO> getUpcomingAppointments(Long doctorId) {
+    public List<AppointmentDoctorResponseDTO> getUpcomingAppointments(UUID doctorId) {
         return appointmentRepository.findByDoctorDoctorIdAndAppointmentDateAfter(doctorId, LocalDate.now())
                 .stream()
                 .map(appt -> AppointmentDoctorResponseDTO.builder()
@@ -117,7 +118,7 @@ public class DoctorService {
     }
 
     // Reschedule appointment (if allowed)
-    public AppointmentDoctorResponseDTO rescheduleAppointment(Long doctorId, Long appointmentId, AppointmentDoctorReqDTO req) {
+    public AppointmentDoctorResponseDTO rescheduleAppointment(UUID doctorId, UUID appointmentId, AppointmentDoctorReqDTO req) {
         Appointment appointment = appointmentRepository.findByDoctorDoctorIdAndAppointmentId(doctorId,appointmentId)
                 .orElseThrow(() -> new RuntimeException("Appointment not found"));
 
@@ -139,7 +140,7 @@ public class DoctorService {
                 .build();
     }
 
-    public String updateDoctorProfile(Long userId, DoctorProfileReqDTO req) {
+    public String updateDoctorProfile(UUID userId, DoctorProfileReqDTO req) {
         Users user = userRepository.findById(userId).get();
         Doctor doctor=doctorRepository.findByUsers(user);
         doctor.setEmail(req.getEmail());

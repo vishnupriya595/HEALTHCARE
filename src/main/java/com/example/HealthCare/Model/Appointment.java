@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -14,8 +15,8 @@ import java.time.LocalDate;
 
 public class Appointment {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long appointmentId;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID appointmentId;
 
     @ManyToOne
     @ToString.Exclude

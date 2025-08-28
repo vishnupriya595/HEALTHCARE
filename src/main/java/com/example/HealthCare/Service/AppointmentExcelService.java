@@ -3,6 +3,8 @@ package com.example.HealthCare.Service;
 import com.example.HealthCare.Model.*;
 import com.example.HealthCare.Repository.*;
 import lombok.RequiredArgsConstructor;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -11,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -30,16 +33,26 @@ public class AppointmentExcelService {
                 Row row = sheet.getRow(i);
                 if (row == null) continue;
 
-                Long doctorId = (long) row.getCell(0).getNumericCellValue();
-                Long patientId = (long) row.getCell(1).getNumericCellValue();
-                LocalDate appointmentDate = row.getCell(2).getLocalDateTimeCellValue().toLocalDate();
-                Appointment.Status status = Appointment.Status.valueOf(row.getCell(3).getStringCellValue());
-                String medicineName = row.getCell(4).getStringCellValue();
-                String dosage = row.getCell(5).getStringCellValue();
-                String instructions = row.getCell(6).getStringCellValue();
-                Double amount = row.getCell(7).getNumericCellValue();
-                Billing.PaymentStatus paymentStatus = Billing.PaymentStatus.valueOf(row.getCell(8).getStringCellValue());
-                LocalDate paymentDate = row.getCell(9) != null ? row.getCell(9).getLocalDateTimeCellValue().toLocalDate() : null;
+                String doctorIdStr = getCellValueAsString(row.getCell(0));
+                String patientIdStr = getCellValueAsString(row.getCell(1));
+                String appointmentDateStr = getCellValueAsString(row.getCell(2));
+                String statusStr = getCellValueAsString(row.getCell(3));
+                String medicineName = getCellValueAsString(row.getCell(4));
+                String dosage = getCellValueAsString(row.getCell(5));
+                String instructions = getCellValueAsString(row.getCell(6));
+                String amountStr = getCellValueAsString(row.getCell(7));
+                String paymentStatusStr = getCellValueAsString(row.getCell(8));
+                String paymentDateStr = getCellValueAsString(row.getCell(9));
+
+                UUID doctorId = UUID.fromString(doctorIdStr);
+                UUID patientId = UUID.fromString(patientIdStr);
+                LocalDate appointmentDate = LocalDate.parse(appointmentDateStr);
+                Appointment.Status status = Appointment.Status.valueOf(statusStr);
+                Double amount = amountStr != null ? Double.valueOf(amountStr) : null;
+                Billing.PaymentStatus paymentStatus = Billing.PaymentStatus.valueOf(paymentStatusStr);
+                LocalDate paymentDate = (paymentDateStr != null && !paymentDateStr.isEmpty())
+                        ? LocalDate.parse(paymentDateStr)
+                        : null;
 
                 Patient patient = patientRepository.findById(patientId).orElseThrow();
                 Doctor doctor = doctorRepository.findById(doctorId).orElseThrow();
@@ -62,7 +75,6 @@ public class AppointmentExcelService {
                         .build();
                 prescriptionRepository.save(prescription);
 
-
                 Billing billing = Billing.builder()
                         .appointment(appointment)
                         .patient(patient)
@@ -72,7 +84,6 @@ public class AppointmentExcelService {
                         .build();
                 billingRepository.save(billing);
 
-
                 appointment.setPrescription(prescription);
                 appointment.setBill(billing);
                 appointmentRepository.save(appointment);
@@ -80,4 +91,31 @@ public class AppointmentExcelService {
         }
     }
 
+    private String getCellValueAsString(Cell cell) {
+        if (cell == null) return null;
+        switch (cell.getCellType()) {
+            case STRING:
+                return cell.getStringCellValue().trim();
+            case NUMERIC:
+                if (DateUtil.isCellDateFormatted(cell)) {
+                    return cell.getLocalDateTimeCellValue().toLocalDate().toString();
+                }
+                // Avoid scientific notation for integers
+                double d = cell.getNumericCellValue();
+                if (d == (long) d) {
+                    return String.valueOf((long) d);
+                } else {
+                    return String.valueOf(d);
+                }
+            case BOOLEAN:
+                return String.valueOf(cell.getBooleanCellValue());
+            case FORMULA:
+                return cell.getCellFormula();
+            case BLANK:
+            default:
+                return null;
+        }
+    }
+
 }
+

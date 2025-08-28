@@ -19,9 +19,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/doctor/")
+@CrossOrigin(origins = "http://localhost:4200")
 public class DoctorController {
     @Autowired
     private DoctorService doctorService;
@@ -32,7 +34,7 @@ public class DoctorController {
 
 
     @GetMapping("{doctorId}/patients")
-    public ResponseEntity<List<PatientDiseaseResponseDTO>> listPatients(@PathVariable Long doctorId) {
+    public ResponseEntity<List<PatientDiseaseResponseDTO>> listPatients(@PathVariable UUID doctorId) {
         return ResponseEntity.ok(doctorService.listPatientsAssigned(doctorId));
     }
 
@@ -40,7 +42,7 @@ public class DoctorController {
     @GetMapping("/patients/{patientId}")
     public ResponseEntity<PatientResponseDTO> getPatientDetails(
 
-            @PathVariable Long patientId) {
+            @PathVariable UUID patientId) {
         return ResponseEntity.ok(doctorService.getPatientDetails( patientId));
     }
 
@@ -54,8 +56,8 @@ public class DoctorController {
 
     @PostMapping("{doctorId}/patients/{patientId}/prescriptions")
     public ResponseEntity<PrescriptionResponseDTO> addPrescription(
-            @PathVariable Long doctorId,
-            @PathVariable Long patientId,
+            @PathVariable UUID doctorId,
+            @PathVariable UUID patientId,
             @RequestBody PrescriptionDTO prescriptionDTO) {
         return ResponseEntity
                 .status(201) // Created
@@ -65,21 +67,21 @@ public class DoctorController {
     // Get upcoming appointments
     @GetMapping("/{doctorId}/appointments")
     public ResponseEntity<List<AppointmentDoctorResponseDTO>> getUpcomingAppointments(
-            @PathVariable Long doctorId) {
+            @PathVariable UUID doctorId) {
         return ResponseEntity.ok(doctorService.getUpcomingAppointments(doctorId));
     }
 
     // Reschedule appointment
     @PutMapping("/{doctorId}/appointments/{appointmentId}/reschedule")
     public ResponseEntity<AppointmentDoctorResponseDTO> rescheduleAppointment(
-            @PathVariable Long doctorId,
-            @PathVariable Long appointmentId,
+            @PathVariable UUID doctorId,
+            @PathVariable UUID appointmentId,
             @RequestBody AppointmentDoctorReqDTO req) {
         return ResponseEntity.ok(doctorService.rescheduleAppointment(doctorId, appointmentId, req));
     }
 
     @PostMapping("update/profile/{id}")
-    public String updateProfile(@PathVariable Long id, @RequestBody DoctorProfileReqDTO  doctorProfileReqDTO) {
+    public String updateProfile(@PathVariable UUID id, @RequestBody DoctorProfileReqDTO  doctorProfileReqDTO) {
         return doctorService.updateDoctorProfile(id, doctorProfileReqDTO);
 
 

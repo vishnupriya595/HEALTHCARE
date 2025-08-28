@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -16,8 +17,8 @@ import java.util.List;
 
 public class Doctor {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long doctorId;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID doctorId;
 
     private String name;
     private String specialization;

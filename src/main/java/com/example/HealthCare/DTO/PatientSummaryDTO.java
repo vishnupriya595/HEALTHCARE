@@ -6,11 +6,12 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Builder
 public class PatientSummaryDTO {
-    private Long patientId;
+    private UUID patientId;
     private String name;
     private int age;
     private String gender;

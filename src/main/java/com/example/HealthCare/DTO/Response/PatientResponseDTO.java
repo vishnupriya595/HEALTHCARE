@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -12,7 +14,7 @@ import lombok.NoArgsConstructor;
 
 
 public class PatientResponseDTO {
-    private long patientId;
+    private UUID patientId;
     private String name;
     private int age;
     private String gender;

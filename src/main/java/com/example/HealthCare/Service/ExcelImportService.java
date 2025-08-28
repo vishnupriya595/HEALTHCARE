@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -79,8 +80,8 @@ public class ExcelImportService {
                     AppointmentDTO dto =AppointmentDTO.builder()
                             .appointmentDate(row.getCell(0).getLocalDateTimeCellValue().toLocalDate())
                             .status(Appointment.Status.valueOf(row.getCell(1).getStringCellValue().toUpperCase()))
-                            .doctorId((long) row.getCell(2).getNumericCellValue())
-                            .patientId((long) row.getCell(3).getNumericCellValue())
+                            .doctorId(UUID.fromString(row.getCell(2).getStringCellValue()))
+                            .patientId(UUID.fromString(row.getCell(3).getStringCellValue()))
                             .build();
                     saveAppointment(dto);
                 }

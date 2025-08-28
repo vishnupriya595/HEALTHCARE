@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -16,8 +17,8 @@ import java.time.LocalDate;
 public class Billing {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long billingId;
+@GeneratedValue(strategy = GenerationType.UUID)
+    private UUID billingId;
 
     @ManyToOne
     @JoinColumn(name = "patient_id")
